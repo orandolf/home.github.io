@@ -1,0 +1,47 @@
+name: Seleniumbase Tests
+
+permissions:
+  contents: write
+
+on: [push, pull_request]
+
+jobs:
+  selenium-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install seleniumbase
+
+    - name: Download browser driver (e.g., ChromeDriver)
+      run: |
+        CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+        wget -q -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+        sudo unzip -o /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+        sudo chmod +x /usr/local/bin/chromedriver
+
+    - name: Run Seleniumbase tests
+      run: |
+        pytest sauce_demo.py --html=report.html
+        
+    - name: Create directory for GitHub Pages
+      run: |
+        mkdir -p gh-pages
+        mv report.html gh-pages/
+  
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: gh-pages
+        publish_branch: gh-pages
