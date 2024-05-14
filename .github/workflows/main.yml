@@ -30,7 +30,7 @@ jobs:
         sudo unzip -o /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
         sudo chmod +x /usr/local/bin/chromedriver
 
-    - name: Run Seleniumbase tests
+    - name: Run Seleniumbase Tests
       run: |
         pytest sauce_demo.py --html=report.html
         
