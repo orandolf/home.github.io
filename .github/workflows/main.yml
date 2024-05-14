@@ -32,7 +32,7 @@ jobs:
 
     - name: Run Seleniumbase tests
       run: |
-        pytest sauce_demo.py --html=report.html
+        pytest sauce_demo.py --dashboard --html=report.html
         
     - name: Create directory for GitHub Pages
       run: |
