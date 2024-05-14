@@ -1,4 +1,4 @@
-rom seleniumbase import BaseCase
+from seleniumbase import BaseCase
 
 
 class MyTestClass(BaseCase):
